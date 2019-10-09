@@ -36,4 +36,15 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    public function loggedOut(\Illuminate\Http\Request $request)
+    {
+        $this->guard()->logout();
+
+        $request->session()->invalidate();
+
+        // redirectヘルパの引数を / から /home に変更
+        // なんか知らんが遷移先が/になってしまう
+        return $this->loggedOut($request) ?: redirect('/home');
+    }
 }
